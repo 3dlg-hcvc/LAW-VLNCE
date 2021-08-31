@@ -6,12 +6,11 @@ Prior work supervises the agent with actions based on the shortest path from the
 
 ## Setup
 
-Please follow the set-up instructions and download the data as described in the [VLN-CE codebase](https://github.com/jacobkrantz/VLN-CE)
-After that, clone this repository and install dependencies from requirements.py:
+Please follow the set-up instructions and download the data as described in the [VLN-CE codebase](https://github.com/jacobkrantz/VLN-CE). Next, clone this repository and install dependencies from requirements.py:
 
 ```bash
-git clone git@github.com:3dlg-hcvc/VLN-CE-waypoints.git
-cd VLN-CE-waypoints
+git clone git@github.com:3dlg-hcvc/LAW-VLNCE.git
+cd LAW-VLNCE
 python -m pip install -r requirements.txt
 ```
 
