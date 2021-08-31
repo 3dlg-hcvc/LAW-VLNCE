@@ -1,6 +1,6 @@
 # Language-Aligned Waypoint (LAW) Supervision for Vision-and-Language Navigation in Continuous Environments
 
-This repository is the official implementation of [Language-Aligned Waypoint (LAW) Supervision for Vision-and-Language Navigation in Continuous Environments](https://github.com/sonia-raychaudhuri/LAW-VLNCE) [[Project Website]](https://github.com/sonia-raychaudhuri/LAW-VLNCE).
+This repository is the official implementation of [Language-Aligned Waypoint (LAW) Supervision for Vision-and-Language Navigation in Continuous Environments](https://github.com/3dlg-hcvc/LAW-VLNCE) [[Project Website]](https://github.com/3dlg-hcvc/LAW-VLNCE).
 
 In the Vision-and-Language Navigation (VLN) task an embodied agent navigates a 3D environment, following natural language instructions. A challenge in this task is how to handle 'off the path' scenarios where an agent veers from a reference path.
 Prior work supervises the agent with actions based on the shortest path from the agent’s location to the goal, but such goal-oriented supervision is often not in alignment with the instruction. Furthermore, the evaluation metrics employed by prior work do not measure how much of a language instruction the agent is able to follow. In this work, we propose a simple and effective language-aligned supervision scheme, and a new metric that measures the number of sub-instructions the agent has completed during navigation.
@@ -37,7 +37,7 @@ python run.py \
 
 We follow a similar training regime as [VLN-CE](https://github.com/jacobkrantz/VLN-CE), by first training with teacher forcing on the augmented data and then fine-tuning with Dagger on the original Room-to-Room data.
 
-For our `LAW pano` model, we first train using [`cma_pm_aug.yaml`]() config. We then evaluate all the checkpoints and select the best performing one, on the nDTW metric. This checkpoint is then fine-tuned using [`cma_pm_da_aug_tune`]() config, by updating the `LOAD_FROM_CKPT` and `CKPT_TO_LOAD` fields.
+For our `LAW pano` model, we first train using [`cma_pm_aug.yaml`](https://github.com/3dlg-hcvc/LAW-VLNCE/blob/master/vlnce_baselines/config/paper_configs/law_pano_config/cma_pm_aug.yaml) config. We then evaluate all the checkpoints and select the best performing one, on the nDTW metric. This checkpoint is then fine-tuned using [`cma_pm_da_aug_tune`](https://github.com/3dlg-hcvc/LAW-VLNCE/blob/master/vlnce_baselines/config/paper_configs/law_pano_config/cma_pm_da_aug_tune.yaml) config, by updating the `LOAD_FROM_CKPT` and `CKPT_TO_LOAD` fields.
 
 
 ## Evaluation
