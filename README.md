@@ -1,6 +1,6 @@
 # Language-Aligned Waypoint (LAW) Supervision for Vision-and-Language Navigation in Continuous Environments
 
-This repository is the official implementation of [Language-Aligned Waypoint (LAW) Supervision for Vision-and-Language Navigation in Continuous Environments](https://github.com/sonia-raychaudhuri/LAW-VLNCE)[Project Website](https://github.com/sonia-raychaudhuri/LAW-VLNCE).
+This repository is the official implementation of [Language-Aligned Waypoint (LAW) Supervision for Vision-and-Language Navigation in Continuous Environments](https://github.com/sonia-raychaudhuri/LAW-VLNCE) [[Project Website]](https://github.com/sonia-raychaudhuri/LAW-VLNCE).
 In the Vision-and-Language Navigation (VLN) task an embodied agent navigates a 3D environment, following natural language instructions. A challenge in this task is how to handle 'off the path' scenarios where an agent veers from a reference path.
 Prior work supervises the agent with actions based on the shortest path from the agent’s location to the goal, but such goal-oriented supervision is often not in alignment with the instruction. Furthermore, the evaluation metrics employed by prior work do not measure how much of a language instruction the agent is able to follow. In this work, we propose a simple and effective language-aligned supervision scheme, and a new metric that measures the number of sub-instructions the agent has completed during navigation.
 
