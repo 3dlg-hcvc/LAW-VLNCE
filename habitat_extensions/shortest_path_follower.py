@@ -1,11 +1,14 @@
-# Copied from https://github.com/facebookresearch/habitat-lab/blob/v0.1.4/habitat/tasks/nav/shortest_path_follower.py
-# Use the Habitat v0.1.4 ShortestPathFollower for compatibility with
-# the dataset generation oracle.
+#!/usr/bin/env python3
+
+# Copyright (c) Facebook, Inc. and its affiliates.
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
 
 from typing import Optional, Union
 
-import habitat_sim
 import numpy as np
+
+import habitat_sim
 from habitat.sims.habitat_simulator.actions import HabitatSimActions
 from habitat.sims.habitat_simulator.habitat_simulator import HabitatSim
 from habitat.utils.geometry_utils import (
@@ -22,7 +25,7 @@ def action_to_one_hot(action: int) -> np.array:
     return one_hot
 
 
-class ShortestPathFollowerCompat:
+class ShortestPathFollower:
     r"""Utility class for extracting the action on the shortest path to the
         goal.
     Args:
@@ -39,16 +42,19 @@ class ShortestPathFollowerCompat:
     ):
         assert (
             getattr(sim, "geodesic_distance", None) is not None
-        ), "{} must have a method called geodesic_distance".format(type(sim).__name__)
+        ), "{} must have a method called geodesic_distance".format(
+            type(sim).__name__
+        )
 
         self._sim = sim
-        self._max_delta = self._sim.config.FORWARD_STEP_SIZE - EPSILON
+        self._max_delta = self._sim.habitat_config.FORWARD_STEP_SIZE - EPSILON
         self._goal_radius = goal_radius
-        self._step_size = self._sim.config.FORWARD_STEP_SIZE
+        self._step_size = self._sim.habitat_config.FORWARD_STEP_SIZE
 
         self._mode = (
             "geodesic_path"
-            if getattr(sim, "get_straight_shortest_path_points", None) is not None
+            if getattr(sim, "get_straight_shortest_path_points", None)
+            is not None
             else "greedy"
         )
         self._return_one_hot = return_one_hot
@@ -58,12 +64,81 @@ class ShortestPathFollowerCompat:
             return action_to_one_hot(action)
         else:
             return action
+    
+    def get_next_action_for_waypoint(
+        self, goal_pos: np.array, agent_pos: np.array, agent_rotation
+    ) -> Optional[Union[int, np.array]]:
+        """Returns the next action along the shortest path to the waypoint.
+        """
 
-    def get_next_action(self, goal_pos: np.array) -> Optional[Union[int, np.array]]:
+        #print('---in get_next_action_for_waypoint:agent_pos=', agent_pos,' ;;agent_rotation=',agent_rotation,'goal_pos=', goal_pos)
+        """ if (
+            self._sim.geodesic_distance(
+                agent_pos, goal_pos
+            )
+            <= self._goal_radius
+        ):
+            return None """
+
+        max_grad_dir = self._est_max_grad_dir_waypoint(goal_pos, agent_pos)
+        if max_grad_dir is None:
+            return self._get_return_value(HabitatSimActions.MOVE_FORWARD)
+        return self._step_along_grad_waypoint(max_grad_dir, agent_rotation)
+
+    def _est_max_grad_dir_waypoint(self, goal_pos: np.array, agent_pos: np.array) -> np.array:
+
+        points = self._sim.get_straight_shortest_path_points(
+            agent_pos, goal_pos
+        )
+        # Add a little offset as things get weird if
+        # points[1] - points[0] is anti-parallel with forward
+        if len(points) < 2:
+            return None
+        max_grad_dir = quaternion_from_two_vectors(
+            self._sim.forward_vector,
+            points[1]
+            - points[0]
+            + EPSILON
+            * np.cross(self._sim.up_vector, self._sim.forward_vector),
+        )
+        max_grad_dir.x = 0
+        max_grad_dir = np.normalized(max_grad_dir)
+        return max_grad_dir
+
+    def _step_along_grad_waypoint(
+        self, grad_dir: np.quaternion, agent_rotation
+    ) -> Union[int, np.array]:
+        alpha = angle_between_quaternions(grad_dir, agent_rotation)
+        if alpha <= np.deg2rad(self._sim.config.TURN_ANGLE) + EPSILON:
+            return self._get_return_value(HabitatSimActions.MOVE_FORWARD)
+        else:
+            sim_action = HabitatSimActions.TURN_LEFT
+            self._sim.step(sim_action)
+            best_turn = (
+                HabitatSimActions.TURN_LEFT
+                if (
+                    angle_between_quaternions(
+                        grad_dir, self._sim.get_agent_state().rotation
+                    )
+                    < alpha
+                )
+                else HabitatSimActions.TURN_RIGHT
+            )
+            return self._get_return_value(best_turn)
+
+    def _get_agent_position(self) -> np.array:
+        return self._sim.get_agent_state().position
+
+    def get_next_action(
+        self, goal_pos: np.array
+    ) -> Optional[Union[int, np.array]]:
         """Returns the next action along the shortest path.
         """
+        #print('---in get_next_action:', self._sim.get_agent_state().position,' ;;goal_pos=', goal_pos)
         if (
-            self._sim.geodesic_distance(self._sim.get_agent_state().position, goal_pos)
+            self._sim.geodesic_distance(
+                self._sim.get_agent_state().position, goal_pos
+            )
             <= self._goal_radius
         ):
             return None
@@ -73,10 +148,12 @@ class ShortestPathFollowerCompat:
             return self._get_return_value(HabitatSimActions.MOVE_FORWARD)
         return self._step_along_grad(max_grad_dir)
 
-    def _step_along_grad(self, grad_dir: np.quaternion) -> Union[int, np.array]:
+    def _step_along_grad(
+        self, grad_dir: np.quaternion
+    ) -> Union[int, np.array]:
         current_state = self._sim.get_agent_state()
         alpha = angle_between_quaternions(grad_dir, current_state.rotation)
-        if alpha <= np.deg2rad(self._sim.config.TURN_ANGLE) + EPSILON:
+        if alpha <= np.deg2rad(self._sim.habitat_config.TURN_ANGLE) + EPSILON:
             return self._get_return_value(HabitatSimActions.MOVE_FORWARD)
         else:
             sim_action = HabitatSimActions.TURN_LEFT
@@ -95,12 +172,17 @@ class ShortestPathFollowerCompat:
             return self._get_return_value(best_turn)
 
     def _reset_agent_state(self, state: habitat_sim.AgentState) -> None:
-        self._sim.set_agent_state(state.position, state.rotation, reset_sensors=False)
+        self._sim.set_agent_state(
+            state.position, state.rotation, reset_sensors=False
+        )
 
     def _geo_dist(self, goal_pos: np.array) -> float:
         return self._sim.geodesic_distance(
             self._sim.get_agent_state().position, goal_pos
         )
+
+    def _geo_dist_between_points(self, point1, point2) -> float:
+        return self._sim.geodesic_distance(point1, point2)
 
     def _est_max_grad_dir(self, goal_pos: np.array) -> np.array:
 
@@ -119,7 +201,8 @@ class ShortestPathFollowerCompat:
                 self._sim.forward_vector,
                 points[1]
                 - points[0]
-                + EPSILON * np.cross(self._sim.up_vector, self._sim.forward_vector),
+                + EPSILON
+                * np.cross(self._sim.up_vector, self._sim.forward_vector),
             )
             max_grad_dir.x = 0
             max_grad_dir = np.normalized(max_grad_dir)

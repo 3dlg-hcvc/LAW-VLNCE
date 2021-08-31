@@ -76,7 +76,7 @@ class InstructionEncoder(nn.Module):
         """
         instruction = observations["instruction"].long()
 
-        lengths = (instruction != 0.0).long().sum(dim=1)
+        lengths = (instruction != 0.0).long().sum(dim=1).cpu()
         embedded = self.embedding_layer(instruction)
 
         packed_seq = nn.utils.rnn.pack_padded_sequence(

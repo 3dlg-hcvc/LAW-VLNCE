@@ -1,6 +1,6 @@
 from typing import List, Optional, Union
 
-from habitat.config.default import Config as CN
+from yacs.config import CfgNode as CN
 
 from habitat_extensions.config.default import get_extended_config as get_task_config
 
@@ -16,6 +16,10 @@ _C.ENV_NAME = "VLNCEDaggerEnv"
 _C.SIMULATOR_GPU_ID = 0
 _C.TORCH_GPU_ID = 0
 _C.NUM_PROCESSES = 4
+_C.NUM_UPDATES = 100
+_C.TOTAL_NUM_STEPS = -1.0
+_C.NUM_CHECKPOINTS = 10.0
+_C.CHECKPOINT_INTERVAL = -1.0
 _C.VIDEO_OPTION = []  # options: "disk", "tensorboard"
 _C.VIDEO_DIR = "videos/debug"
 _C.TENSORBOARD_DIR = "data/tensorboard_dirs/debug"
@@ -23,6 +27,8 @@ _C.SENSORS = ["RGB_SENSOR", "DEPTH_SENSOR"]
 _C.CHECKPOINT_FOLDER = "data/checkpoints"
 _C.LOG_FILE = "train.log"
 _C.EVAL_CKPT_PATH_DIR = "data/checkpoints"  # path to ckpt or path to ckpts dir
+_C.STATS_EVAL_DIR = "data/stats"  # path to ckpt or path to ckpts dir
+_C.SAVE_TRAJECTORY = False
 
 # -----------------------------------------------------------------------------
 # EVAL CONFIG
@@ -36,6 +42,7 @@ _C.EVAL.EVAL_NONLEARNING = False
 _C.EVAL.NONLEARNING = CN()
 _C.EVAL.NONLEARNING.AGENT = "RandomAgent"
 
+
 # -----------------------------------------------------------------------------
 # INFERENCE CONFIG
 # -----------------------------------------------------------------------------
@@ -48,6 +55,7 @@ _C.INFERENCE.INFERENCE_NONLEARNING = False
 _C.INFERENCE.NONLEARNING = CN()
 _C.INFERENCE.NONLEARNING.AGENT = "RandomAgent"
 
+
 # -----------------------------------------------------------------------------
 # DAGGER ENVIRONMENT CONFIG
 # -----------------------------------------------------------------------------
@@ -58,7 +66,7 @@ _C.DAGGER.EPOCHS = 4
 _C.DAGGER.UPDATE_SIZE = 5000
 _C.DAGGER.BATCH_SIZE = 5
 _C.DAGGER.P = 0.75
-_C.DAGGER.LMDB_MAP_SIZE = 1.0e12
+_C.DAGGER.LMDB_MAP_SIZE = 2.0e12
 # How often to commit the writes to the DB, less commits is
 # better, but everything must be in memory until a commit happens/
 _C.DAGGER.LMDB_COMMIT_FREQUENCY = 500
@@ -127,7 +135,6 @@ _C.MODEL.CMA.rcm_state_encoder = False
 _C.MODEL.PROGRESS_MONITOR = CN()
 _C.MODEL.PROGRESS_MONITOR.use = False
 _C.MODEL.PROGRESS_MONITOR.alpha = 1.0  # loss multiplier
-
 
 def get_config(
     config_paths: Optional[Union[List[str], str]] = None, opts: Optional[list] = None

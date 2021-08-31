@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from gym import Space
 from habitat import Config
-from habitat_baselines.rl.models.rnn_state_encoder import RNNStateEncoder
+from vlnce_baselines.models.encoders.rnn_state_encoder import RNNStateEncoder
 from habitat_baselines.rl.ppo.policy import Net
 
 from vlnce_baselines.common.aux_losses import AuxLosses
@@ -32,6 +32,19 @@ class CMAPolicy(BasePolicy):
             action_space.n,
         )
 
+    @classmethod
+    def from_config(
+        cls, config: Config, observation_space: Space, action_space: Space
+    ):
+        config.defrost()
+        config.MODEL.TORCH_GPU_ID = config.TORCH_GPU_ID
+        config.freeze()
+
+        return cls(
+            observation_space=observation_space,
+            action_space=action_space,
+            model_config=config.MODEL,
+        )
 
 class CMANet(Net):
     r""" A cross-modal attention (CMA) network that contains:

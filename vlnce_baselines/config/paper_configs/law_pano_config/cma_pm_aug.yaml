@@ -1,0 +1,37 @@
+BASE_TASK_CONFIG_PATH: habitat_extensions/config/vlnce_task_aug_law_pano.yaml
+SIMULATOR_GPU_ID: 0
+TORCH_GPU_ID: 0
+NUM_PROCESSES: 1
+NUM_UPDATES: 100
+TOTAL_NUM_STEPS: -1.0
+NUM_CHECKPOINTS: 10.0
+CHECKPOINT_INTERVAL: -1.0
+TENSORBOARD_DIR: experiments/tensorboard_dirs/law_pano/phase1/cma_pm_aug
+CHECKPOINT_FOLDER: experiments/checkpoints/law_pano/phase1/cma_pm_aug
+EVAL_CKPT_PATH_DIR: experiments/checkpoints/law_pano/phase1/cma_pm_aug
+STATS_EVAL_DIR: experiments/evaluations/law_pano/phase1/cma_pm_aug
+SAVE_TRAJECTORY: False
+
+EVAL:
+  USE_CKPT_CONFIG: False
+  SPLIT: val_unseen
+  EPISODE_COUNT: 50000
+
+DAGGER:
+  ITERATIONS: 1
+  EPOCHS: 45
+  UPDATE_SIZE: 157232
+  BATCH_SIZE: 5
+  P: 1.0
+  PRELOAD_LMDB_FEATURES: False
+  LMDB_FEATURES_DIR: experiments/trajectories_dirs/law_pano/phase1/cma_pm_aug/trajectories.lmdb
+
+MODEL:
+  INSTRUCTION_ENCODER:
+    bidirectional: True
+
+  CMA:
+    use: True
+
+  PROGRESS_MONITOR:
+    use: True

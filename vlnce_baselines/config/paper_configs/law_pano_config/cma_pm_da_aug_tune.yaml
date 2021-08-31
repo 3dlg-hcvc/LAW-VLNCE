@@ -1,0 +1,39 @@
+BASE_TASK_CONFIG_PATH: habitat_extensions/config/vlnce_task_law_pano.yaml
+SIMULATOR_GPU_ID: 0
+TORCH_GPU_ID: 0
+NUM_PROCESSES: 1
+NUM_UPDATES: 100
+TOTAL_NUM_STEPS: -1.0
+NUM_CHECKPOINTS: 10.0
+CHECKPOINT_INTERVAL: -1.0
+TENSORBOARD_DIR: experiments/tensorboard_dirs/law_pano/phase2/cma_pm_da_aug_tune
+CHECKPOINT_FOLDER: experiments/checkpoints/law_pano/phase2/cma_pm_da_aug_tune
+EVAL_CKPT_PATH_DIR: experiments/checkpoints/law_pano/phase2/cma_pm_da_aug_tune
+STATS_EVAL_DIR: experiments/evaluations/law_pano/phase2/cma_pm_da_aug_tune
+SAVE_TRAJECTORY: False
+
+EVAL:
+  USE_CKPT_CONFIG: False
+  SPLIT: val_unseen
+  EPISODE_COUNT: 50000
+
+DAGGER:
+  ITERATIONS: 10
+  EPOCHS: 4
+  UPDATE_SIZE: 5000
+  BATCH_SIZE: 5
+  P: 0.5
+  PRELOAD_LMDB_FEATURES: False
+  LMDB_FEATURES_DIR: experiments/trajectories_dirs/law_pano/phase2/cma_pm_da_aug_tune/trajectories.lmdb
+  LOAD_FROM_CKPT: True
+  CKPT_TO_LOAD: experiments/checkpoints/law_pano/phase1/cma_pm_aug/ckpt.0.pth # REPLACE with best performing checkpoint
+
+MODEL:
+  INSTRUCTION_ENCODER:
+    bidirectional: True
+
+  CMA:
+    use: True
+
+  PROGRESS_MONITOR:
+    use: True

@@ -1,4 +1,4 @@
-from habitat_baselines.common.utils import CustomFixedCategorical
+from habitat_baselines.utils.common import CustomFixedCategorical
 from habitat_baselines.rl.ppo.policy import Policy
 
 
