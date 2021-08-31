@@ -7,12 +7,19 @@ import attr
 from habitat.config import Config
 from habitat.core.dataset import Dataset
 from habitat.core.registry import registry
+from habitat.core.utils import not_none_validator
 from habitat.datasets.pointnav.pointnav_dataset import ALL_SCENES_MASK
 from habitat.datasets.utils import VocabDict
 from habitat.tasks.nav.nav import NavigationGoal
 from habitat.tasks.vln.vln import InstructionData, VLNEpisode
 
 DEFAULT_SCENE_PATH_PREFIX = "data/scene_datasets/"
+
+SLURM_JOBID = os.environ.get("SLURM_JOB_ID", None)
+SLURM_TMPDIR = os.environ.get("SLURM_TMPDIR", None)
+
+def is_slurm_job() -> bool:
+    return SLURM_JOBID is not None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -36,9 +43,13 @@ class VLNCEDatasetV1(Dataset):
 
     @staticmethod
     def check_config_paths_exist(config: Config) -> bool:
+        if is_slurm_job() and SLURM_TMPDIR is not None:
+            scenes_dir = os.path.join(SLURM_TMPDIR, config.SCENES_DIR)
+        else:
+            scenes_dir = config.SCENES_DIR
         return os.path.exists(
             config.DATA_PATH.format(split=config.SPLIT)
-        ) and os.path.exists(config.SCENES_DIR)
+        ) and os.path.exists(scenes_dir)
 
     @staticmethod
     def _scene_from_episode(episode: VLNExtendedEpisode) -> str:
@@ -64,8 +75,12 @@ class VLNCEDatasetV1(Dataset):
             return
 
         dataset_filename = config.DATA_PATH.format(split=config.SPLIT)
+        if is_slurm_job() and SLURM_TMPDIR is not None:
+            scenes_dir = os.path.join(SLURM_TMPDIR, config.SCENES_DIR)
+        else:
+            scenes_dir = config.SCENES_DIR
         with gzip.open(dataset_filename, "rt") as f:
-            self.from_json(f.read(), scenes_dir=config.SCENES_DIR)
+            self.from_json(f.read(), scenes_dir=scenes_dir)
 
         if ALL_SCENES_MASK not in config.CONTENT_SCENES:
             scenes_to_load = set(config.CONTENT_SCENES)

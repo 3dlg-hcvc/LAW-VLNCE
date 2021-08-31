@@ -5,11 +5,14 @@ import torch.nn.functional as F
 import torchvision.models as models
 from gym import spaces
 from habitat import logger
-from habitat_baselines.common.utils import Flatten
+#from habitat_baselines.common.utils import Flatten
 from habitat_baselines.rl.ddppo.policy import resnet
 from habitat_baselines.rl.ddppo.policy.resnet_policy import ResNetEncoder
 
-
+class Flatten(nn.Module):
+    def forward(self, x):
+        return x.contiguous().view(x.size(0), -1)
+        
 class VlnResnetDepthEncoder(nn.Module):
     def __init__(
         self,
@@ -29,7 +32,6 @@ class VlnResnetDepthEncoder(nn.Module):
             ngroups=resnet_baseplanes // 2,
             make_backbone=getattr(resnet, backbone),
             normalize_visual_inputs=normalize_visual_inputs,
-            obs_transform=None,
         )
 
         for param in self.visual_encoder.parameters():
@@ -114,10 +116,11 @@ class TorchVisionResNet50(nn.Module):
     """
 
     def __init__(
-        self, observation_space, output_size, device, spatial_output: bool = False
+        self, observation_space, output_size, device, spatial_output: bool = False, flat: bool = True
     ):
         super().__init__()
         self.device = device
+        self.flat = flat
         self.resnet_layer_size = 2048
         linear_layer_input_size = 0
         if "rgb" in observation_space.spaces:
@@ -126,7 +129,7 @@ class TorchVisionResNet50(nn.Module):
             obs_size_1 = observation_space.spaces["rgb"].shape[1]
             if obs_size_0 != 224 or obs_size_1 != 224:
                 logger.warn(
-                    f"WARNING: TorchVisionResNet50: observation size {obs_size} is not conformant to expected ResNet input size [3x224x224]"
+                    f"WARNING: TorchVisionResNet50: observation size {obs_size_0} is not conformant to expected ResNet input size [3x224x224]"
                 )
             linear_layer_input_size += self.resnet_layer_size
         else:
@@ -195,8 +198,17 @@ class TorchVisionResNet50(nn.Module):
         if "rgb_features" in observations:
             resnet_output = observations["rgb_features"]
         else:
+            rgb_observations = observations["rgb"]
             # permute tensor to dimension [BATCH x CHANNEL x HEIGHT x WIDTH]
-            rgb_observations = observations["rgb"].permute(0, 3, 1, 2)
+            rgb_observations = rgb_observations.permute(0, 3, 1, 2)
+
+            obs_size = rgb_observations.shape[2]
+            if obs_size != 224:
+                # resizing rgb input image
+                rgb_observations = F.interpolate(
+                    rgb_observations, size=(224, 224)
+                )
+            
             rgb_observations = rgb_observations / 255.0  # normalize RGB
             resnet_output = resnet_forward(rgb_observations.contiguous())
 
@@ -218,6 +230,9 @@ class TorchVisionResNet50(nn.Module):
 
             return torch.cat([resnet_output, spatial_features], dim=1)
         else:
-            return self.activation(
-                self.fc(torch.flatten(resnet_output, 1))
-            )  # [BATCH x OUTPUT_DIM]
+            if self.flat:
+                return self.activation(
+                    self.fc(torch.flatten(resnet_output, 1))
+                )  # [BATCH x OUTPUT_DIM]
+
+            return resnet_output

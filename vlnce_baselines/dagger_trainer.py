@@ -18,7 +18,8 @@ from habitat_baselines.common.base_trainer import BaseRLTrainer
 from habitat_baselines.common.baseline_registry import baseline_registry
 from habitat_baselines.common.environments import get_env_class
 from habitat_baselines.common.tensorboard_utils import TensorboardWriter
-from habitat_baselines.common.utils import batch_obs, generate_video
+#from habitat_baselines.common.utils import batch_obs, generate_video
+from habitat_baselines.utils.common import batch_obs, generate_video
 
 from habitat_extensions.utils import observations_to_image
 from vlnce_baselines.common.aux_losses import AuxLosses
@@ -330,6 +331,10 @@ class DaggerTrainer(BaseRLTrainer):
         # Populate dones with False initially
         dones = [False for _ in range(self.envs.num_envs)]
 
+        info_episodes = []
+        if len(self.config.VIDEO_OPTION) > 0:
+            rgb_frames = [[] for _ in range(self.config.NUM_PROCESSES)]
+
         # https://arxiv.org/pdf/1011.0686.pdf
         # Theoretically, any beta function is fine so long as it converges to
         # zero as data_it -> inf. The paper suggests starting with beta = 1 and
@@ -386,6 +391,7 @@ class DaggerTrainer(BaseRLTrainer):
 
                 for i in range(self.envs.num_envs):
                     if dones[i] and not skips[i]:
+                        info_episodes.append(infos[i])
                         ep = episodes[i]
                         traj_obs = batch_obs(
                             [step[0] for step in ep], device=torch.device("cpu")
@@ -477,7 +483,14 @@ class DaggerTrainer(BaseRLTrainer):
                 prev_actions.copy_(actions)
 
                 outputs = self.envs.step([a[0].item() for a in actions])
-                observations, rewards, dones, _ = [list(x) for x in zip(*outputs)]
+                observations, rewards, dones, infos = [list(x) for x in zip(*outputs)]
+
+                if len(self.config.VIDEO_OPTION) > 0:
+                    for i in range(self.envs.num_envs):
+                        frame = observations_to_image(
+                            observations[i], infos[i]
+                        )
+                        rgb_frames[i].append(frame)
 
                 not_done_masks = torch.tensor(
                     [[0.0] if done else [1.0] for done in dones],
@@ -491,6 +504,23 @@ class DaggerTrainer(BaseRLTrainer):
                 batch = batch_obs(observations, self.device)
 
             txn.commit()
+
+        if self.config.SAVE_TRAJECTORY:
+            aggregated_stats = {}
+            for i in range(len(info_episodes)):
+                for stat_key in info_episodes[i].keys():
+                    if stat_key in ["top_down_map", "collisions"]:
+                        continue
+                    if stat_key in aggregated_stats:
+                        aggregated_stats[stat_key] += info_episodes[i][stat_key]
+                    else:
+                        aggregated_stats[stat_key] = info_episodes[i][stat_key]
+
+            for stat_key in aggregated_stats.keys():
+                aggregated_stats[stat_key] = aggregated_stats[stat_key]/len(info_episodes)
+
+            with open(f"{self.config.STATS_EVAL_DIR}/stats_episodes_training.json", "w") as f:
+                json.dump(aggregated_stats, f, indent=4)
 
         self.envs.close()
         self.envs = None
@@ -565,6 +595,10 @@ class DaggerTrainer(BaseRLTrainer):
         self.config.defrost()
         self.config.TASK_CONFIG.TASK.NDTW.SPLIT = split
         self.config.TASK_CONFIG.TASK.SDTW.SPLIT = split
+        self.config.TASK_CONFIG.ENVIRONMENT.ITERATOR_OPTIONS.SHUFFLE = False
+        if len(self.config.VIDEO_OPTION) > 0:
+            self.config.TASK_CONFIG.TASK.MEASUREMENTS.append("TOP_DOWN_MAP")
+            self.config.TASK_CONFIG.TASK.MEASUREMENTS.append("COLLISIONS")
 
         # if doing teacher forcing, don't switch the scene until it is complete
         if self.config.DAGGER.P == 1.0:

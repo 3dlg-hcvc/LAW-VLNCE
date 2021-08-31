@@ -2,8 +2,8 @@ import random
 from typing import Type, Union
 
 import habitat
-from habitat import Config, Env, RLEnv, VectorEnv, make_dataset
-from habitat_baselines.common.env_utils import make_env_fn
+from habitat import Config, Env, RLEnv, ThreadedVectorEnv, VectorEnv, make_dataset
+from habitat_baselines.utils.env_utils import make_env_fn
 
 
 def construct_envs(
@@ -66,9 +66,14 @@ def construct_envs(
 
     envs = habitat.VectorEnv(
         make_env_fn=make_env_fn,
-        env_fn_args=tuple(tuple(zip(configs, env_classes, range(num_processes)))),
+        env_fn_args=tuple(tuple(zip(configs, env_classes))),
         auto_reset_done=auto_reset_done,
     )
+    # envs = habitat.ThreadedVectorEnv(
+    #     make_env_fn=make_env_fn,
+    #     env_fn_args=tuple(tuple(zip(configs, env_classes, range(num_processes)))),
+    #     auto_reset_done=auto_reset_done,
+    # )
     return envs
 
 

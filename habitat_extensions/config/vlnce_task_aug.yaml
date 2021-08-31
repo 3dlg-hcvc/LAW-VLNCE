@@ -34,6 +34,7 @@ TASK:
     SUCCESS,
     SPL,
     NDTW,
+    SDTW,
     PATH_LENGTH,
     ORACLE_SUCCESS,
     STEPS_TAKEN
