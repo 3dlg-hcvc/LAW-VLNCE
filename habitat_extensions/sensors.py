@@ -98,7 +98,7 @@ class VLNOracleActionSplineSensor(Sensor):
         self.follower.mode = "geodesic_path"
 
     def _get_uuid(self, *args: Any, **kwargs: Any):
-        return "vln_oracle_action_sensor"
+        return "vln_spline_action_sensor"
 
     def _get_sensor_type(self, *args: Any, **kwargs: Any):
         return SensorTypes.TACTILE
@@ -179,7 +179,7 @@ class VLNOracleActionGeodesicSensor(Sensor):
         self.possible_actions= [HabitatSimActions.MOVE_FORWARD, HabitatSimActions.TURN_LEFT, HabitatSimActions.TURN_RIGHT]
 
     def _get_uuid(self, *args: Any, **kwargs: Any):
-        return "vln_oracle_action_sensor"
+        return "vln_law_action_sensor"
 
     def _get_sensor_type(self, *args: Any, **kwargs: Any):
         return SensorTypes.TACTILE
