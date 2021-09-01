@@ -1,4 +1,5 @@
 BASE_TASK_CONFIG_PATH: habitat_extensions/config/vlnce_task_aug_law_pano.yaml
+TRAINER_NAME: daggerlaw
 SIMULATOR_GPU_ID: 0
 TORCH_GPU_ID: 0
 NUM_PROCESSES: 1
@@ -10,7 +11,6 @@ TENSORBOARD_DIR: experiments/tensorboard_dirs/law_pano/phase1/cma_pm_aug
 CHECKPOINT_FOLDER: experiments/checkpoints/law_pano/phase1/cma_pm_aug
 EVAL_CKPT_PATH_DIR: experiments/checkpoints/law_pano/phase1/cma_pm_aug
 STATS_EVAL_DIR: experiments/evaluations/law_pano/phase1/cma_pm_aug
-SAVE_TRAJECTORY: False
 
 EVAL:
   USE_CKPT_CONFIG: False

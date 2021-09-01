@@ -10,7 +10,6 @@ TENSORBOARD_DIR: experiments/tensorboard_dirs/goal/phase2/cma_pm_da_aug_tune
 CHECKPOINT_FOLDER: experiments/checkpoints/goal/phase2/cma_pm_da_aug_tune
 EVAL_CKPT_PATH_DIR: experiments/checkpoints/goal/phase2/cma_pm_da_aug_tune
 STATS_EVAL_DIR: experiments/evaluations/goal/phase2/cma_pm_da_aug_tune
-SAVE_TRAJECTORY: False
 
 EVAL:
   USE_CKPT_CONFIG: False
