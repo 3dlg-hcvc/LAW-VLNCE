@@ -849,6 +849,7 @@ class DaggerMixTrainer(BaseRLTrainer):
 
         config.freeze()
 
+        os.makedirs(config.STATS_EVAL_DIR, exist_ok=True)
         # setup agent
         self.envs = construct_envs_auto_reset_false(
             config, get_env_class(config.ENV_NAME)
@@ -980,7 +981,7 @@ class DaggerMixTrainer(BaseRLTrainer):
             )
 
         split = config.TASK_CONFIG.DATASET.SPLIT
-        with open(f"stats_ckpt_{checkpoint_index}_{split}.json", "w") as f:
+        with open(f"{config.STATS_EVAL_DIR}/stats_ckpt_{checkpoint_index}_{split}.json", "w") as f:
             json.dump(aggregated_stats, f, indent=4)
 
         logger.info(f"Episodes evaluated: {num_episodes}")
