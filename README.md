@@ -7,7 +7,7 @@ Prior work supervises the agent with actions based on the shortest path from the
 
 ## Setup
 
-Please follow the set-up instructions and download the data as described in the [VLN-CE codebase](https://github.com/jacobkrantz/VLN-CE). Next, clone this repository and install dependencies from requirements.py:
+We build on top of VLN-CE codebase. Please follow the set-up instructions and download the data as described in the [VLN-CE codebase](https://github.com/jacobkrantz/VLN-CE). Next, clone this repository and install dependencies from requirements.py:
 
 ```bash
 git clone git@github.com:3dlg-hcvc/LAW-VLNCE.git
@@ -56,4 +56,4 @@ If you use LAW-VLNCE in your research, please cite the following paper:
 
 ## Acknowledgements
 
-We build our project on the [VLN-CE](https://github.com/jacobkrantz/VLN-CE) code.
+We thank Jacob Krantz for the [VLN-CE](https://github.com/jacobkrantz/VLN-CE) codebase, on which we build our repository.
