@@ -53,7 +53,8 @@ div.abstract{
     display: block;
     margin-top: 20px;
 }
-div.abstract p{
+
+.text-justify {
     text-align: justify;
 }
 
