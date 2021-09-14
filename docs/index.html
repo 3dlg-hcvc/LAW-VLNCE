@@ -1,83 +1,219 @@
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
-    <title>Language-Aligned Waypoint (LAW) Supervision for VLN-CE</title>
-    <link rel="stylesheet" href="css/index.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="../../../../favicon.ico">
+
+  <title>Language-Aligned Waypoint (LAW) Supervision for VLN-CE</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.css">
+
+  <!-- Custom styles for this template -->
+  <link href="css/app.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="container">
-        <div class="header" id="header">
-            <h1>Language-Aligned Waypoint (LAW) Supervision for Vision-and-Language Navigation in Continuous
-                Environments</h1>
-            <ul>
-                <li><a href="#">Sonia Raychaudhuri<sup>1</sup></a></li>
-                <li><a href="https://saimwani.github.io/">Saim Wani<sup>2</sup></a></li>
-                <li><a href="https://shivanshpatel35.github.io/">Shivansh Patel<sup>2</sup></a></li>
-                <li><a href="https://unnat.github.io/">Unnat Jain<sup>3</sup></a></li>
-                <li><a href="https://angelxuanchang.github.io/">Angel X. Chang<sup>1</sup></a></li>
-            </ul>
-            <span><sup>1</sup>Simon Fraser University, &nbsp; <sup>2</sup>IIT Kanpur, &nbsp; <sup>3</sup>UIUC </span>
-            <span>EMNLP 2021</span>
-        </div>
-        <div class="link-bar">
 
-        </div>
-
-        <div class="section abstract">
-            <h2>Abstract</h2>
-            <p class="text-justify">
-                In the Vision-and-Language Navigation (VLN) task an embodied agent navigates a 3D environment, following
-                natural language instructions. A challenge in this task is how to handle ‘off the path’ scenarios where
-                an agent veers from a reference path. Prior work supervises the agent with actions based on the shortest
-                path from the agent’s location to the goal, but such goal-oriented supervision is often not in alignment
-                with the instruction. Furthermore, the evaluation metrics employed by prior work do not measure how much
-                of a language instruction the agent is able to follow. In this work, we propose a simple and effective
-                language-aligned supervision scheme, and a new metric that measures the number of sub-instructions the
-                agent has completed during navigation.
-            </p>
-
-        </div>
-        <div class="link-bar">
-            [<a href="https://github.com/3dlg-hcvc/LAW-VLNCE">GitHub</a>]
-            [<a href="#">Paper</a>]
-        </div>
-        <div class="section video">
-            <h2>Summary Video</h2>
-            <iframe width="560" height="315" src="#" title="YouTube video player" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
-        </div>
-
-
-        <div class="section qualitative-results">
-            <h2>Qualitative Results</h2>
-            &nbsp;
-        </div>
-
-        <div class="section results">
-            <h2>Quantitative Results</h2>
-            <div class="results-table">
-                &nbsp;
-            </div>
-        </div>
-
-        <div class="section qualitative-results">
-            <h2>Pretrained models</h2>
-            <p>&nbsp;</p>
-        </div>
-
-        <div class="section">
-            <h2>Citation</h2>
-            <p>If you find our work useful, please cite our paper below.<br></p>
-            <div>
-                &nbsp;
-            </div>
-        </div>
-
+  <div class="container" id="main">
+    <div class="row">
+      <h2 class="col-md-8 col-md-offset-2 text-center">
+        <b>Language-Aligned Waypoint (LAW) Supervision for Vision-and-Language Navigation in Continuous Environments</br>
+          <small>
+            EMNLP 2021
+          </small>
+      </h2>
     </div>
-    <br />
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <ul class="list-inline">
+          <li><a href="#">Sonia Raychaudhuri</a></br>Simon Fraser University</li>
+          <li><a href="https://saimwani.github.io/">Saim Wani</a></br>IIT Kanpur</li>
+          <li><a href="https://shivanshpatel35.github.io/">Shivansh Patel</a></br>IIT Kanpur</li>
+          <li><a href="https://unnat.github.io/">Unnat Jain</a></br>UIUC</li>
+          <li><a href="https://angelxuanchang.github.io/">Angel X. Chang</a></br>Simon Fraser University</li>
+        </ul>
+      </div>
+    </div>
 
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4 text-center">
+        <ul class="nav nav-pills nav-justified">
+          <li>
+            <a href="#">
+              <image src="images/law_paper_img.png" height="40px">
+                <h4><strong>Paper</strong></h4>
+            </a>
+          </li>
+          <!-- <li>
+            <a href="#">
+              <image src="images/youtube_icon.png" height="40px">
+                <h4><strong>Video</strong></h4>
+            </a>
+          </li> -->
+          <li>
+            <a href="https://github.com/3dlg-hcvc/LAW-VLNCE">
+              <image src="images/github.png" height="40px">
+                <h4><strong>Code</strong></h4>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8 col-md-offset-2">
+          <image src="images/teaser.png" class="img-responsive" alt="teaser-image">
+            <figcaption class="figure-caption text-center">
+              Language-aligned path (blue) vs Goal-oriented path (red) i.e. the shortest path to the goal
+            </figcaption>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h3>
+          Abstract
+        </h3>
+        <p class="text-justify">
+          In the Vision-and-Language Navigation (VLN) task an embodied agent navigates a 3D environment, following
+          natural language instructions. A challenge in this task is how to handle ‘off the path’ scenarios where
+          an agent veers from a reference path. Prior work supervises the agent with actions based on the shortest
+          path from the agent’s location to the goal, but such goal-oriented supervision is often not in alignment
+          with the instruction. Furthermore, the evaluation metrics employed by prior work do not measure how much
+          of a language instruction the agent is able to follow. In this work, we propose a simple and effective
+          language-aligned supervision scheme, and a new metric that measures the number of sub-instructions the
+          agent has completed during navigation.
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h3>
+          LAW Supervision
+        </h3>
+        <p class="text-justify">
+          Rather than supervising with the conventional goal-oriented sensor, we supervise with a language-aligned
+          sensor, which helps bring the agent back on the path to the next waypoint if it wanders off.
+
+        </p>
+        <div class="col-md-8 col-md-offset-2">
+          <image src="images/model_diagram.png" class="img-responsive" alt="model-diagram">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h3>
+          Results
+        </h3>
+
+        <p class="text-justify">
+          Our <b>LAW pano</b> outperforms <b>goal</b> across all metrics, including the instruction-following metrics,
+          suggesting that language-aligned supervision encourages the agent to follow instructions better than
+          goal-oriented supervision.
+        </p>
+
+        <div class="col-md-12">
+          <image src="images/results_law_vs_goal.png" class="img-responsive" alt="quant_results">
+            <!-- <figcaption class="figure-caption text-center"><b>LAW pano</b> outperforms <b>goal</b></figcaption> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h3>
+          Qualitative Analysis
+        </h3>
+        <p class="text-justify">
+          Figure on the left shows that <b>LAW pano</b> outperforms <b>goal</b>, especially on lower-range NDTW
+          episodes. The figure on the right shows an example episode from R2R unseen split. The agent is able to learn
+          to follow instruction better with <b>LAW pano</b>(right) than <b>goal</b>(lef). This is reflected in higher
+          nDTW and waypoint accuracy (WA) metrics. It also shows the mapping of sub-instructions to waypoints utilizing
+          FG-R2R for this episode.
+        </p>
+      </div>
+      <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-6">
+          <image src="images/law_does_better_on_unaligned_episodes.png" class="img-responsive"
+            alt="law-better-than-goal">
+        </div>
+
+        <div class="col-md-6">
+          <image src="images/qual_analysis_episode.png" class="img-responsive" alt="qualitative-analysis">
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h3>
+          Citation
+        </h3>
+        <div class="form-group col-md-12">
+          If you use LAW in your research, please cite the following:<br>
+          <textarea id="bibtex-law" class="form-control" readonly>
+            @article{
+            }
+          </textarea>
+          <br>
+          For VLN-CE paper, please cite: <br>
+          <textarea id="bibtex-vlnce" class="form-control" readonly>
+          @inproceedings{krantz_vlnce_2020,
+            title={Beyond the Nav-Graph: Vision and Language Navigation in Continuous Environments},
+            author={Jacob Krantz and Erik Wijmans and Arjun Majundar and Dhruv Batra and Stefan Lee},
+            booktitle={European Conference on Computer Vision (ECCV)},
+            year={2020}
+            }
+        </textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h3>
+          Acknowledgements
+        </h3>
+        <p class="text-justify">
+          We thank Jacob Krantz for the <a href="https://github.com/jacobkrantz/VLN-CE">VLN-CE</a> code on which this
+          project was based, Erik Wijmans for initial guidance with reproducing the original VLN-CE results, and Manolis
+          Savva for discussions and feedback. We also thank the anonymous reviewers for their suggestions and feedback.
+          This work was funded in part by a Canada CIFAR AI Chair and NSERC Discovery Grant, and enabled in part by
+          support provided by <a href="www.westgrid.ca">WestGrid</a> and <a href="www.computecanada.ca">Compute
+            Canada</a>.
+          <br>
+          The website template was inspired from <a href="https://jonbarron.info/">Jon Barron</a>.
+        </p>
+      </div>
+    </div>
+
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
+  <script src="js/app.js"></script>
 </body>
 
 </html>
