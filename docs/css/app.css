@@ -161,3 +161,20 @@ span.highlight {
 .img-responsive {
   margin: 0 auto;
 }
+
+.auth-list-inline {
+	list-style: none;
+	margin-left: -0.5em;
+	margin-right: -0.5em;
+	padding-left: 0;
+  padding-right: 0;
+}
+
+.auth-list-inline > li {
+  display: inline-block;
+	margin-left: 0.15em;
+	margin-right: 0.15em;
+  width: 19%;
+  text-align: center;
+  vertical-align: top;
+}
