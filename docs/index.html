@@ -26,10 +26,10 @@
   <div class="container" id="main">
     <div class="row">
       <h2 class="col-md-8 col-md-offset-2 text-center">
-        <b>Language-Aligned Waypoint (LAW) Supervision for Vision-and-Language Navigation in Continuous Environments</br>
-          <small>
-            EMNLP 2021
-          </small>
+        Language-Aligned Waypoint (LAW) Supervision for Vision-and-Language Navigation in Continuous Environments</br>
+        <small>
+          EMNLP 2021
+        </small>
       </h2>
     </div>
     <div class="row">
@@ -134,27 +134,38 @@
     </div>
 
     <div class="row">
+      <h3 class="col-md-8 col-md-offset-2">
+        Qualitative Analysis
+      </h3>
+    </div>
+
+    <div class="row">
       <div class="col-md-8 col-md-offset-2">
-        <h3>
-          Qualitative Analysis
-        </h3>
         <p class="text-justify">
-          Figure on the left shows that <b>LAW pano</b> outperforms <b>goal</b>, especially on lower-range NDTW
-          episodes. The figure on the right shows an example episode from R2R unseen split. The agent is able to learn
-          to follow instruction better with <b>LAW pano</b>(right) than <b>goal</b>(lef). This is reflected in higher
-          nDTW and waypoint accuracy (WA) metrics. It also shows the mapping of sub-instructions to waypoints utilizing
+          Agent performance binned by nDTW value of reference path to shortest path (95% CI error bars) shows that
+          <b>LAW pano</b> outperforms <b>goal</b>, especially on lower-range NDTW episodes. This indicates that
+          language-aligned supervision is better suited for the instruction following task.
+        </p>
+      </div>
+      <div class="col-md-6 col-md-offset-3">
+        <image src="images/law_does_better_on_unaligned_episodes.png" class="img-responsive" alt="law-better-than-goal">
+          <br><br>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <p class="text-justify">
+          The figure below shows an example episode from R2R unseen split. The agent is able to learn
+          to follow instruction better with <b>LAW pano</b>(right) than <b>goal</b>(lef). This is reflected in
+          higher
+          nDTW and waypoint accuracy (WA) metrics. It also shows the mapping of sub-instructions to waypoints
+          utilizing
           FG-R2R for this episode.
         </p>
       </div>
-      <div class="col-md-8 col-md-offset-2">
-        <div class="col-md-6">
-          <image src="images/law_does_better_on_unaligned_episodes.png" class="img-responsive"
-            alt="law-better-than-goal">
-        </div>
-
-        <div class="col-md-6">
-          <image src="images/qual_analysis_episode.png" class="img-responsive" alt="qualitative-analysis">
-        </div>
+      <div class="col-md-6 col-md-offset-3">
+        <image src="images/qual_analysis_episode.png" class="img-responsive" alt="qualitative-analysis">
       </div>
     </div>
 
@@ -168,18 +179,9 @@
           If you use LAW in your research, please cite the following:<br>
           <textarea id="bibtex-law" class="form-control" readonly>
             @article{
+              ...
             }
           </textarea>
-          <br>
-          For VLN-CE paper, please cite: <br>
-          <textarea id="bibtex-vlnce" class="form-control" readonly>
-          @inproceedings{krantz_vlnce_2020,
-            title={Beyond the Nav-Graph: Vision and Language Navigation in Continuous Environments},
-            author={Jacob Krantz and Erik Wijmans and Arjun Majundar and Dhruv Batra and Stefan Lee},
-            booktitle={European Conference on Computer Vision (ECCV)},
-            year={2020}
-            }
-        </textarea>
         </div>
       </div>
     </div>
@@ -191,13 +193,13 @@
         </h3>
         <p class="text-justify">
           We thank Jacob Krantz for the <a href="https://github.com/jacobkrantz/VLN-CE">VLN-CE</a> code on which this
-          project was based, Erik Wijmans for initial guidance with reproducing the original VLN-CE results, and Manolis
-          Savva for discussions and feedback. We also thank the anonymous reviewers for their suggestions and feedback.
+          project was based, Erik Wijmans for initial guidance with reproducing the original VLN-CE results, and
+          Manolis
+          Savva for discussions and feedback. We also thank the anonymous reviewers for their suggestions and
+          feedback.
           This work was funded in part by a Canada CIFAR AI Chair and NSERC Discovery Grant, and enabled in part by
           support provided by <a href="www.westgrid.ca">WestGrid</a> and <a href="www.computecanada.ca">Compute
             Canada</a>.
-          <br>
-          The website template was inspired from <a href="https://jonbarron.info/">Jon Barron</a>.
         </p>
       </div>
     </div>

@@ -5,11 +5,6 @@ $(document).ready(function() {
         lineWrapping: true,
         readOnly:true
     });
-    var editor_vlnce = CodeMirror.fromTextArea(document.getElementById("bibtex-vlnce"), {
-        lineNumbers: false,
-        lineWrapping: true,
-        readOnly:true
-    });
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
